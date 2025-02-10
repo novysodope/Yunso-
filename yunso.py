@@ -342,12 +342,7 @@ github的搜索结果太露骨了，我先删掉这个方法了不公开了，�
 
 if __name__ == "__main__":
     yunso = Yunso(config)
-    # yunsobt = Yunsobt(config)
-    # 又学会了一招，设置daemon=True让线程随主线程退出
-    yunso_thread = threading.Thread(target=yunso.run,daemon=True)
-    # yunsobt_thread = threading.Thread(target=yunsobt.run,daemon=True)
-    yunso_thread.start()
-    # yunsobt_thread.start()
+    yunso.run()
     try:
         while True:
             time.sleep(1)
