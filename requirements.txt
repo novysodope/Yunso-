@@ -1,0 +1,7 @@
+requests
+wxauto
+rich
+pandas
+openpyxl
+beautifulsoup4
+configparser
