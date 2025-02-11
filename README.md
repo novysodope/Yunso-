@@ -42,11 +42,12 @@ search_keywords = CVE-20,CNVD-20,CNVD-C-20,CNNVD-20,命令执行漏洞,SQL注入
 - python3 yunso.py
 
 # 效果
-![image](https://github.com/user-attachments/assets/4a08d45a-1c7d-411e-9916-db13c7265251)
+![image](https://github.com/user-attachments/assets/92c201e2-e429-4302-87d4-94508e65087c)
 
-![image](https://github.com/user-attachments/assets/5e965b1c-3da3-4181-9921-82bd05f4eab3)
+![image](https://github.com/user-attachments/assets/c8398c09-043b-4bfb-9f04-eef4525d05f0)
 
-![image](https://github.com/user-attachments/assets/b8d64941-5c39-4601-bea4-523371d0a80d)
+![image](https://github.com/user-attachments/assets/c7492c28-ceb5-4ff3-a7d3-5a41fd8692ec)
+
 
 
 # 其他
@@ -58,7 +59,8 @@ self.wx.SendMsg("online", '文件传输助手')
 ```
 这样就能知道脚本是否还在运行：
 
-![2ba3f63e578eb69fe32a7a7665da983](https://github.com/user-attachments/assets/14e8ec90-c130-410b-8700-b05bc825fcf4)
+![1739254131303](https://github.com/user-attachments/assets/4fc8f7a4-9d0c-46b2-b5e6-d38dd216f2cb)
+
 
 
 # 可能遇到的问题
