@@ -54,7 +54,7 @@ ai_url = sk-xxx
 # 运行
 - pip install -r requirements.txt 下载好需要的库
 - python3 yunso.py
-- 
+
 # 使用方法
 
 **监控推送**：自动运行，每30分钟重复一次
