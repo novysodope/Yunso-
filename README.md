@@ -20,7 +20,7 @@ https://github.com/novysodope/yunso      云索|Fupo Series
 代码易懂，注释已给出
 - class Yunso 监控类
 - class Yunsobt 搜索类
-- class AiBot AI大模型
+- class AiBot AI大模型类
 
 # 使用前提
 - python3.8
@@ -65,7 +65,7 @@ ai_url = sk-xxx
 
 **搜索**：艾特机器人搜素：@机器人名字 CVE-XXX-XXXX
 
-**AI**：关键字触发，关键字为二狗+中文逗号：“二狗，” ，或者发送“二狗”查看使用帮助
+**AI**：关键字触发，关键字为二狗+中文逗号+空格：“二狗， ” ，或者发送“二狗”查看使用帮助
 
 # 效果
 **监控推送**：
