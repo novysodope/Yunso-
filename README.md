@@ -15,10 +15,12 @@ https://github.com/novysodope/yunso      云索|Fupo Series
 - 监控Github新动态，并推送到微信
 - 搜索Github内容，并反馈到微信
 - 每周五统计推送周报
-- 对接AI
+- 对接AI大模型
 
 代码易懂，注释已给出
-
+- class Yunso 监控类
+- class Yunsobt 搜索类
+- class AiBot AI大模型
 
 # 使用前提
 - python3.8
