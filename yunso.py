@@ -1,9 +1,9 @@
-
 import requests
 from datetime import datetime, timedelta
 from wxauto import *
 import os
 import json
+from openai import OpenAI
 import re
 from rich import print
 import time
@@ -90,6 +90,7 @@ https://github.com/novysodope/yunso      云索|Fupo Series
             "Accept-Language": "zh-CN,zh;q=0.9"
         }
         self.wx = WeChat()
+        print('Yunso start')
 #---------------------配置-------------------------------
      
 #----------------------初始化sent_records.json，用来检查是否有重复记录------------------------------
@@ -335,14 +336,171 @@ https://github.com/novysodope/yunso      云索|Fupo Series
             time.sleep(1800)
 #----------------------脚本循环------------------------------
 
-'''
-github的搜索结果太露骨了，我先删掉这个方法了不公开了，避免被有心之人利用
-'''
+class Yunsobt:
+#---------------------配置-------------------------------
+    GITHUB_API_URL = "https://api.github.com/search/repositories?q={query}&sort=stars&order=desc"
+    def __init__(self,config):
+        self.config = config
+        self.access_token = self.config['DEFAULT']['github_api_key']
+        self.listen_list = self.config.get("DEFAULT", "listen_list", fallback="").split(",")
+        self.name = self.config['DEFAULT']['me']
+        self.me = '@' + self.name
+        print(f"[green][机器人名称][/green] {self.me}\n")
+        self.replied_msgs = set()
+        self.black_keywords = self.config.get("DEFAULT", "black_keywords", fallback="").split(",")
+        itembalck = '|'.join(self.black_keywords)
+        print(f"[green][黑名单关键字][/green] {itembalck}\n")
+        print('Yunsobt start')
+#---------------------配置-------------------------------
+        self.wx = WeChat()
+        for i in self.listen_list:
+            self.wx.AddListenChat(who=i)
+
+    def run(self):
+        while True:
+#---------------------监听消息-------------------------------
+            try:
+                msgs = self.wx.GetListenMessage()
+            except Exception as e:
+                for i in self.listen_list:
+                    self.wx.AddListenChat(who=i)
+                    msgs = self.wx.GetListenMessage()
+            for chat in msgs:
+                who = chat.who
+                one_megs = msgs.get(chat)
+                for msg in one_megs:
+                    content = msg.content
+#---------------------监听消息-------------------------------
+                    # 因为这里是按秒来循环监听的，所以这里要加个标识符，防止特定消息被反复处理
+                    msg_id = msg.id
+
+                    if msg_id in self.replied_msgs:
+                        continue
+#---------------------处理收到的关键字-------------------------------
+                    if self.me in content:
+                        chat.SendMsg("\n请稍后，正在查询...", who)
+                        time.sleep(1)
+                        query = content.replace(self.me, '').strip()
+                        if query:
+                            headers = {"Authorization": f"token {self.access_token}"}
+                            response = requests.get(self.GITHUB_API_URL.format(query=query), headers=headers, timeout=120)
+                            if response.status_code == 200:
+                                result = response.json()
+                                if "items" in result and result["items"]:
+                                    filtered_results = []
+                                    for item in result["items"][:5]:
+                                        name = item['name']
+                                        url = item['html_url']
+                                        description = item.get('description', '无描述')
+                                        try:
+                                            # 这里还是有点问题，有时间再改，先加个try
+                                            if any(keyword.lower() in (name + description).lower() for keyword in self.black_keywords):
+                                                continue
+                                        except Exception as e:
+                                            print(e)
+                                            pass
+
+                                        filtered_results.append(f"- 标题: {name}\n- URL: {url}\n- 描述: {description}\n\n")
+
+                                    if filtered_results:
+                                        chat.SendMsg(f"\n只显示star前5:\n\n{''.join(filtered_results)}", who)
+                                    else:
+                                        chat.SendMsg("搜索结果中无合适内容", who)
+                                else:
+                                    chat.SendMsg("没有找到相关仓库", who)
+                            else:
+                                chat.SendMsg("GitHub 搜索失败", who)
+
+                        self.replied_msgs.add(msg_id)
+
+            time.sleep(1)
+#---------------------处理收到的关键字-------------------------------
+
+#---------------------AI-------------------------------
+class AiBot:
+    def __init__(self,config):
+        self.config = config
+        self.ai_name = self.config['DEFAULT']['me']
+        self.ai_key = self.config['AI']['ai_key']
+        print(f"[green][AI KEY][/green] {self.ai_key}\n")
+        self.ai_url = self.config['AI']['ai_url']
+        print(f"[green][AI API][/green] {self.ai_url}\n")
+        self.listen_list = self.config.get("DEFAULT", "listen_list", fallback="").split(",")
+        self.replied_msgs = set()
+        self.wx = WeChat()
+        print('AiBot start')
+        print("————————————————初始化结束————————————————\n")
+        for i in self.listen_list:
+            self.wx.AddListenChat(who=i)
+
+    def run(self):
+        while True:
+            try:
+                msgs = self.wx.GetListenMessage()
+            except Exception as e:
+                for i in self.listen_list:
+                    self.wx.AddListenChat(who=i)
+                    msgs = self.wx.GetListenMessage()
+            for chat in msgs:
+                who = chat.who
+                one_megs = msgs.get(chat)
+                for msg in one_megs:
+                    content = msg.content
+                    #print(content)
+                    msg_id = msg.id
+                    if msg_id in self.replied_msgs:
+                        continue
+                    what = '二狗'
+                    if what in content:
+                        print(content)
+                        #query = content.replace(what, '').strip()
+                        if content == what:
+                            self.wx.SendMsg('什么事？如果想使用AI，请在问题前面加上“二狗”，比如：二狗，在吗？如果想用新会话，请发“狗蛋，清除”',who)
+                        else:
+                            self.wx.SendMsg(
+                                '思考中，请稍后，如果超过1分钟再重新询问（AI思考时间有点长加上回答内容长，所以需要时间）',
+                                who)
+                            try:
+                                messages = [
+                                    {'role': 'user', 'content': content}
+                                ]
+                                client = OpenAI(api_key=self.ai_key,
+                                                base_url=self.ai_url)
+                                response = client.chat.completions.create(
+                                    model="deepseek-v3",
+                                    messages=messages
+                                )
+                                print(response.choices[0].message.content)
+                                self.wx.SendMsg(response.choices[0].message.content, who)
+
+                                messages.append({'role': 'assistant', 'content': response.choices[0].message.content})
+                            except Exception as e:
+                                print(e)
+                                pass
+                    if '狗蛋，清除' in content:
+                        messages.clear()
+                        print(messages)
+                        self.wx.SendMsg("上下文信息清除完毕，聊天重置", who)
+
+
+#---------------------AI-------------------------------
 
 
 if __name__ == "__main__":
     yunso = Yunso(config)
-    yunso.run()
+    yunsobt = Yunsobt(config)
+    aibot = AiBot(config)
+    # 又学会了一招，设置daemon=True让线程随主线程退出
+    yunso_thread = threading.Thread(target=yunso.run,daemon=True)
+    yunsobt_thread = threading.Thread(target=yunsobt.run,daemon=True)
+    aibot_thread = threading.Thread(target=aibot.run, daemon=True)
+
+    yunso_thread.start()
+
+    yunsobt_thread.start()
+
+    aibot_thread.start()
+
     try:
         while True:
             time.sleep(1)
