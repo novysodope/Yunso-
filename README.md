@@ -10,7 +10,7 @@ ____    ____  __    __  .__   __.      _______.  ______
 https://github.com/novysodope/yunso      云索|Fupo Series
 ```
 
-利用wxauto库写的微信推送脚本，利用Github API的语法监控Github最新动态和搜索Github内容，效果看最后
+微信机器人，利用wxauto库写的微信推送脚本，利用Github API的语法监控Github最新动态和搜索Github内容，效果看最后
 
 代码易懂，注释已给出
 
