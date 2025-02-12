@@ -70,6 +70,8 @@ ai_url = sk-xxx
 
 **AI**
 
+![image](https://github.com/user-attachments/assets/bdd0bac6-f512-4c0d-a08b-9df13ea88bc3)
+
 
 # 其他
 - 考虑到在云服务器运行的话，人看不到脚本状态，所以加上了“心跳”
