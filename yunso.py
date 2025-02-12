@@ -450,33 +450,41 @@ class AiBot:
                     msg_id = msg.id
                     if msg_id in self.replied_msgs:
                         continue
-                    what = '二狗'
+                    what = '二狗，'
+                    stra = '二狗'
+                    if content == stra:
+                        print(content)
+                        self.wx.SendMsg(
+                            '什么事？如果想使用AI，请在问题前面加上“二狗，”，比如：二狗，在吗？如果想用新会话，请发“狗蛋，清除”',
+                            who)
+                    else:
+                        pass
                     if what in content:
                         print(content)
                         #query = content.replace(what, '').strip()
-                        if content == what:
-                            self.wx.SendMsg('什么事？如果想使用AI，请在问题前面加上“二狗”，比如：二狗，在吗？如果想用新会话，请发“狗蛋，清除”',who)
-                        else:
-                            self.wx.SendMsg(
-                                '思考中，请稍后，如果超过1分钟再重新询问（AI思考时间有点长加上回答内容长，所以需要时间）',
-                                who)
-                            try:
-                                messages = [
-                                    {'role': 'user', 'content': content}
-                                ]
-                                client = OpenAI(api_key=self.ai_key,
-                                                base_url=self.ai_url)
-                                response = client.chat.completions.create(
-                                    model="deepseek-v3",
-                                    messages=messages
-                                )
-                                print(response.choices[0].message.content)
-                                self.wx.SendMsg(response.choices[0].message.content, who)
+                        self.wx.SendMsg(
+                            '思考中，请稍后，如果超过1分钟再重新询问（AI思考时间有点长加上回答内容长，所以需要时间）',
+                            who)
+                        try:
+                            messages = [
+                                {'role': 'user', 'content': content}
+                            ]
+                            client = OpenAI(api_key=self.ai_key,
+                                            base_url=self.ai_url)
+                            response = client.chat.completions.create(
+                                model="deepseek-v3",
+                                messages=messages
+                            )
+                            print(response.choices[0].message.content)
+                            self.wx.SendMsg(response.choices[0].message.content, who)
 
-                                messages.append({'role': 'assistant', 'content': response.choices[0].message.content})
-                            except Exception as e:
-                                print(e)
-                                pass
+                            messages.append({'role': 'assistant', 'content': response.choices[0].message.content})
+                        except Exception as e:
+                            print(e)
+                            pass
+                        else:
+                            pass
+
                     if '狗蛋，清除' in content:
                         messages.clear()
                         print(messages)
