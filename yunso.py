@@ -455,7 +455,7 @@ class AiBot:
                     if content == stra:
                         print(content)
                         self.wx.SendMsg(
-                            '什么事？如果想使用AI，请在问题前面加上“二狗，”，比如：二狗，在吗？如果想用新会话，请发“狗蛋，清除”',
+                            '什么事？如果想使用AI，请在问题前面加上“二狗”+中文逗号，比如：二狗[，]在吗？如果想用新会话，请发“狗蛋[，]清除”',
                             who)
                     else:
                         pass
