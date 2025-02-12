@@ -14,6 +14,8 @@ https://github.com/novysodope/yunso      云索|Fupo Series
 
 代码易懂，注释已给出
 
+晚点对接AI
+
 # 使用前提
 - python3.8
 - windows（必须）
