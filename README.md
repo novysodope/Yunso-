@@ -40,8 +40,9 @@ search_keywords = 默认提供有，可以自己新加，以,分隔
 [AI]
 ai_key = 参考https://bailian.console.aliyun.com/detail/deepseek-r1#/model-market/detail/deepseek-r1 API示例
 ai_url = 参考https://bailian.console.aliyun.com/detail/deepseek-r1#/model-market/detail/deepseek-r1 API示例
-
+```
 示例:
+···bash
 [DEFAULT]
 GITHUB_API_KEY = AAAXXXXAXAXAXAXAXiamnovyhhh
 listen_list = 群聊A,群聊B,用户A
