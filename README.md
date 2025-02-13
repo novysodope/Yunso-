@@ -42,7 +42,7 @@ ai_key = 参考https://bailian.console.aliyun.com/detail/deepseek-r1#/model-mark
 ai_url = 参考https://bailian.console.aliyun.com/detail/deepseek-r1#/model-market/detail/deepseek-r1 API示例
 ```
 示例:
-···bash
+```bash
 [DEFAULT]
 GITHUB_API_KEY = AAAXXXXAXAXAXAXAXiamnovyhhh
 listen_list = 群聊A,群聊B,用户A
